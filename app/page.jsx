@@ -4,7 +4,7 @@ import Sidebar from "../components/Sidebar";
 import Navbar from "../components/Navbar";
 // import InsightsPanel from "../components/InsightsPanel";
 import LeadCard from "../components/LeadCard";
-import LeadModal from "../components/Modal";
+import LeadModal from "../components/LeadModal";
 
 // Dummy Skeleton Loader Component
 const SkeletonLoader = () => (
@@ -42,9 +42,10 @@ const Home = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [activeItem, setActiveItem] = useState("Leads"); // Default active item
 
-  const handleCardClick = (lead) => {
-    setSelectedLead(lead);
+  const handleCardClick = () => {
+    // setSelectedLead(lead);
     setModalOpen(true);
+    setShowModal(true)
   };
 
   // Function to render content based on the active menu item
@@ -54,17 +55,13 @@ const Home = () => {
         <>
           {/* <InsightsPanel /> */}
           {/* {leadsData.map((lead) => ( */}
-            <LeadCard
-              // key={lead.name}
-              // lead={lead}
-              // onClick={() => handleCardClick(lead)}
-            />
-          {/* ))} */}
-          <LeadModal
-            open={modalOpen}
-            handleClose={() => setModalOpen(false)}
-            lead={selectedLead}
+          <LeadCard
+            // key={lead.name}
+            // lead={lead}
+            onClick={() => handleCardClick()}
           />
+          {/* ))} */}
+         
         </>
       );
     } else {
@@ -82,22 +79,12 @@ const Home = () => {
         {/* Sidebar */}
         <Sidebar activeItem={activeItem} setActiveItem={setActiveItem} />
 
-
         {/* Main Content */}
         <div className="flex-grow bg-gray-50">
           {/* <InsightsPanel /> */}
-          <div className="flex-grow bg-gray-50">
-          {renderContent()}
-        </div>
+          <div className="flex-grow bg-gray-50">{renderContent()}</div>
         </div>
       </div>
-
-      {/* Lead Modal */}
-      <LeadModal
-        open={modalOpen}
-        handleClose={() => setModalOpen(false)}
-        lead={selectedLead}
-      />
     </div>
   );
 };
