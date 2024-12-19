@@ -1,5 +1,9 @@
 import React, { useState } from "react";
-import FilterableTable from "./FilterableTable"
+import FilterableTable from "./FilterableTable";
+import copilot from "../assets/copilot-color.svg";
+import bard from "../assets/google-bard.svg";
+import Image from "next/image";
+import KeyActivities from "./KeyActivities";
 import {
   MoreHorizontal,
   X,
@@ -10,11 +14,16 @@ import {
   Download,
   Layout,
   RefreshCw,
-  Users,
   Trash2,
   Filter,
   Settings,
-  Edit, 
+  Edit,
+  Plus,
+  Group,
+  FilterIcon,
+  PieChart,
+  MailPlusIcon,
+  Calendar,
 } from "lucide-react";
 
 const LeadCard = () => {
@@ -28,9 +37,11 @@ const LeadCard = () => {
       name: "Jane Reyes",
       role: "CIO - Paramount traders",
       avatar: "/api/placeholder/48/48",
+      icon: <MailPlusIcon className="w-4 h-4" />,
+      title: "Engage with Jane Reyes",
       description:
         "Jane may be interested in upgrading espresso machines for her in-store coffee shops.",
-      tags: ["Current Business", "High buying intent"],
+      tags: ["Expand Business", "High buying intent"],
       modalDetails: {
         interests:
           "Jane may be interested in upgrading espresso machines for her in-store coffee shops.",
@@ -55,9 +66,11 @@ const LeadCard = () => {
       name: "Allan Munger",
       role: "Head of Real Estate Development - Contoso Coffee",
       avatar: "/api/placeholder/48/48",
+      icon: <Calendar className="w-4 h-4 " />,
+      title: "Prepare for meeting with Allan",
       description:
         "Prepare for high-buying intent meeting scheduled for 2 PM regarding upgrading service contract.",
-      tags: ["Upcoming meeting", "B2B Sales"],
+      tags: ["Upcoming meeting", "Due Today"],
       modalDetails: {
         interests:
           "Prepare for high-buying intent meeting scheduled for 2 PM regarding upgrading service contract.",
@@ -89,72 +102,113 @@ const LeadCard = () => {
     setSelectedLead(leads[Math.max(currentIndex - 1, 0)]);
   };
 
+  const actionItems = [
+    { text: "Show chart", icon: <LineChart className="w-4 h-4" /> },
+    { text: "Focused view", icon: <Layout className="w-4 h-4" /> },
+    { text: "New", icon: <Plus className="w-4 h-4" /> },
+    { text: "Refresh", icon: <RefreshCw className="w-4 h-4" /> },
+    { text: "Collaborate", icon: <Group className="w-4 h-4" /> },
+    { text: "Delete", icon: <Trash2 className="w-4 h-4" /> },
+  ];
+
+  const dataActions = [
+    { text: "Smart Data", icon: <PieChart className="w-4 h-4" /> },
+    { text: "Filter Data", icon: <FilterIcon className="w-4 h-4" /> },
+    { text: "Edit Columns", icon: <Edit className="w-4 h-4" /> },
+  ];
+
   return (
-    <div className="relative">
-      <div className="flex items-center gap-4 mb-4 text-sm text-gray-600">
-        <div className="flex items-center">
+    <div className="relative flex flex-col">
+      <div className="flex items-center gap-4 mb-4 text-xs p-2 bg-white">
+        <div className="flex items-center text-gray-600">
           <span>My open leads</span>
           <ChevronDown className="w-4 h-4 ml-1" />
         </div>
-        <div className="flex items-center gap-3 ml-auto">
-          <LineChart className="w-4 h-4" />
-          <span>Show chart</span>
-          <Layout className="w-4 h-4 ml-2" />
-          <span>Focused view</span>
+        <div className="flex items-center gap-3 ml-auto flex items-center text-gray-600">
           <div className="flex items-center gap-3 ml-2 border-l pl-3">
-            <button className="flex items-center gap-1">
-              <span className="text-blue-600">New</span>
-            </button>
-            <RefreshCw className="w-4 h-4" />
-            <Users className="w-4 h-4" />
-            <Trash2 className="w-4 h-4" />
-            <Filter className="w-4 h-4" />
-            <Settings className="w-4 h-4" />
+            {actionItems.map((item, index) => (
+              <span key={index} className="flex items-center">
+                {item.icon}
+                <span className="ml-1">{item.text}</span>
+              </span>
+            ))}
+          </div>
+          <div className="flex items-center gap-3 ml-2 border-l pl-3">
+            {dataActions.map((item, index) => (
+              <span key={index} className="flex items-center">
+                {item.icon}
+                <span className="ml-1">{item.text}</span>
+              </span>
+            ))}
           </div>
         </div>
       </div>
       {/* Lead Cards Grid */}
-      <div className="flex items-center gap-2 mb-4">
-        <span className="text-gray-800">Hi Mona,</span>
-        <span className="font-medium">68% of goal achieved</span>
-        <span className="text-gray-600">
-          and rest can be achieved by focusing on 20 top leads.
-        </span>
-      </div>
+      <div className="bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 p-[2px] rounded-[10px]">
+        <div className="flex flex-col bg-white rounded-lg p-6">
+          <div className="flex items-center gap-2 font-[800] mb-4">
+            <span className="text-gray-800 flex gap-x-2 items-center">
+              <Image src={copilot} alt="copilot logo" width={20} height={20} />{" "}
+              Hi Mona,
+            </span>
+            <span className="">
+              <span className="text-[#332CAA]">68% </span> of goal achieved
+            </span>
+            <span className="text-gray-600">
+              and rest can be achieved by focusing on 20 top leads.
+            </span>
+          </div>
 
-      <div className="text-sm text-gray-600 mb-4">
-        Copilot has prioritized 20 key leads that show strong purchase intent
-        and are actively engaging. These leads need your focus.
-      </div>
-      <div className="grid grid-cols-2 gap-4">
-        {leads.map((lead, index) => (
-          <div
-            key={lead.id}
-            className="bg-white p-4 rounded-lg border cursor-pointer hover:shadow-md transition-shadow"
-            onClick={() => {
-              setSelectedLead(lead);
-              setCurrentIndex(index);
-            }}
-          >
-            <div className="flex items-center gap-2 mb-3">
-              <div className="w-8 h-8 bg-gray-200 rounded-full"></div>
-              <div>
-                <div className="font-medium">{lead.name}</div>
-                <div className="text-sm text-gray-500">{lead.role}</div>
-              </div>
-              <MoreHorizontal className="w-4 h-4 ml-auto" />
-            </div>
-            <div className="text-sm text-gray-600">{lead.description}</div>
-            <div className="mt-2 text-xs text-gray-500 flex items-center gap-2">
-              {lead.tags.map((tag, index) => (
-                <React.Fragment key={index}>
-                  {index > 0 && <span>•</span>}
-                  <span>{tag}</span>
-                </React.Fragment>
+          <div className="text-sm text-gray-600 mb-4">
+            Copilot has prioritized 20 key leads that show strong purchase
+            intent and are actively engaging. These leads need your focus.
+          </div>
+          <div className="flex ">
+            <div className="grid w-2/3 grid-cols-2 gap-4">
+              {leads.map((lead, index) => (
+                <div
+                  key={lead.id}
+                  className="bg-white p-4 rounded-lg border cursor-pointer hover:shadow-md transition-shadow"
+                  onClick={() => {
+                    setSelectedLead(lead);
+                    setCurrentIndex(index);
+                  }}
+                >
+                  <div className="flex items-center gap-2 mb-3">
+                    <div className="w-8 h-8 bg-gray-200 rounded-full"></div>
+                    <div>
+                      <div className="font-medium">{lead.name}</div>
+                      <div className="text-sm text-gray-500">{lead.role}</div>
+                    </div>
+                    <MoreHorizontal className="w-4 h-4 ml-auto" />
+                  </div>
+                  <div className="p-4 rounded-lg space-y-2 relative bg-[#F1F5FF]">
+                    <Image
+                      src={bard}
+                      alt="google bard logo"
+                      width={32} // Adjust the width as needed
+                      height={32} // Adjust the height as needed
+                      className="absolute top-0 right-0 p-2 rounded-bl-lg bg-white "
+                    />
+                    <div className="flex  font-bold gap-x-2 items-center text-gray-700">
+                      {lead.icon} {lead.title}
+                    </div>
+                    <div className=" text-gray-600">{lead.description}</div>
+                  </div>
+                  <div className="mt-2 text-xs text-gray-500 flex items-center gap-2">
+                    {lead.tags.map((tag, index) => (
+                      <React.Fragment key={index}>
+                        {index > 0 && <span>•</span>}
+                        <span>{tag}</span>
+                      </React.Fragment>
+                    ))}
+                  </div>
+                </div>
               ))}
             </div>
+            <KeyActivities />
           </div>
-        ))}
+        </div>
       </div>
 
       {/* Modal */}
@@ -305,16 +359,16 @@ const LeadCard = () => {
         </div>
       )}
       <div className="text-sm">
-                  <div className="font-medium">Partnership for Fairburn</div>
-                  <div className="text-gray-500">Review AI analysis Data News</div>
-                {/* </div> */}
-                <ChevronRight className="w-4 h-4 ml-auto" />
-              </div>
-            <button className="text-sm text-blue-600 mt-3">
-              Show all my activities
-            </button>
-      <FilterableTable/>
+        <div className="font-medium">Partnership for Fairburn</div>
+        <div className="text-gray-500">Review AI analysis Data News</div>
+        {/* </div> */}
+        <ChevronRight className="w-4 h-4 ml-auto" />
       </div>
+      <button className="text-sm text-blue-600 mt-3">
+        Show all my activities
+      </button>
+      <FilterableTable />
+    </div>
   );
 };
 

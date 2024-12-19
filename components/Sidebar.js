@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import {
   Home,
   History,
@@ -20,6 +21,9 @@ import {
   Mic,
   Menu,
   ChevronRight,
+  Award,
+  ChevronDown,
+  ChevronUp,
 } from "lucide-react";
 // import DummyContent from "./DummyContent";
 
@@ -28,7 +32,13 @@ import {
 const Sidebar = ({ activeItem, setActiveItem }) => {
   const [isOpen, setIsOpen] = useState(window.innerWidth > 768);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
-  // const [activeItem, setActiveItem] = useState("Leads");
+  const router = useRouter();
+  const [isFullScreen, setIsFullScreen] = useState(false);
+
+  const [openDropdowns, setOpenDropdowns] = useState({
+    Recent: false,
+    Pinned: false,
+  });
 
   useEffect(() => {
     const handleResize = () => {
@@ -41,41 +51,94 @@ const Sidebar = ({ activeItem, setActiveItem }) => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  useEffect(() => {
+    // Set full screen mode when Agent Skills is selected
+    setIsFullScreen(activeItem === "Agent Skills");
+  }, [activeItem]);
+
+  const recentItems = [
+    { text: "Recent Project A", path: "/recent/project-a" },
+    { text: "Recent Customer B", path: "/recent/customer-b" },
+    { text: "Recent Order C", path: "/recent/order-c" },
+    { text: "Recent Report D", path: "/recent/report-d" },
+  ];
+
+  const pinnedItems = [
+    { text: "Important Deal", path: "/pinned/important-deal" },
+    { text: "Q4 Sales Report", path: "/pinned/q4-sales" },
+    { text: "Key Account XYZ", path: "/pinned/account-xyz" },
+    { text: "Team Dashboard", path: "/pinned/team-dashboard" },
+  ];
+
   const menuItems = [
-    { text: "Home", icon: <Home size={18} /> },
-    { text: "Recent", icon: <History size={18} /> },
-    { text: "Pinned", icon: <Star size={18} /> },
-    { text: "My Work", icon: <File size={18} /> },
+    { text: "Home", icon: <Home size={18} />, path: "/" },
+    {
+      text: "Recent",
+      icon: <History size={18} />,
+      hasDropdown: true,
+      dropdownItems: recentItems,
+    },
+    {
+      text: "Pinned",
+      icon: <Star size={18} />,
+      hasDropdown: true,
+      dropdownItems: pinnedItems,
+    },
+    { text: "My Work", icon: <File size={18} />, path: "/my-work" },
   ];
 
   const myWork = [
-    { text: "Sales accelerator", icon: <Rocket size={18} /> },
-    { text: "Dashboards", icon: <LayoutDashboard size={18} /> },
-    { text: "Activities", icon: <Clipboard size={18} /> },
+    {
+      text: "Sales accelerator",
+      icon: <Rocket size={18} />,
+      path: "/",
+    },
+    {
+      text: "Dashboards",
+      icon: <LayoutDashboard size={18} />,
+      path: "/",
+    },
+    { text: "Activities", icon: <Clipboard size={18} />, path: "/" },
   ];
 
   const customers = [
-    { text: "Accounts", icon: <Folder size={18} /> },
-    { text: "Contacts", icon: <Users size={18} /> },
+    { text: "Accounts", icon: <Folder size={18} />, path: "/" },
+    { text: "Contacts", icon: <Users size={18} />, path: "/" },
   ];
 
   const sales = [
-    { text: "Leads", icon: <Phone size={18} /> },
-    { text: "Opportunities", icon: <Info size={18} /> },
-    { text: "Competitors", icon: <UserCircle2 size={18} /> },
+    { text: "Leads", icon: <Phone size={18} />, path: "/" },
+    { text: "Opportunities", icon: <Info size={18} />, path: "/" },
+    {
+      text: "Competitors",
+      icon: <UserCircle2 size={18} />,
+      path: "/",
+    },
   ];
 
   const collateral = [
-    { text: "Quotes", icon: <FileText size={18} /> },
-    { text: "Orders", icon: <FileSpreadsheet size={18} /> },
-    { text: "Invoices", icon: <FileCheck size={18} /> },
-    { text: "Products", icon: <Box size={18} /> },
-    { text: "Sales Literature", icon: <FileArchive size={18} /> },
+    { text: "Quotes", icon: <FileText size={18} />, path: "/" },
+    { text: "Orders", icon: <FileSpreadsheet size={18} />, path: "/" },
+    { text: "Invoices", icon: <FileCheck size={18} />, path: "/" },
+    { text: "Products", icon: <Box size={18} />, path: "/" },
+    {
+      text: "Sales Literature",
+      icon: <FileArchive size={18} />,
+      path: "/sales-literature",
+    },
   ];
 
   const marketing = [
-    { text: "Marketing lists", icon: <FileArchive size={18} /> },
-    { text: "Quick Campaigns", icon: <Mic size={18} /> },
+    {
+      text: "Marketing lists",
+      icon: <FileArchive size={18} />,
+      path: "/marketing-lists",
+    },
+    {
+      text: "Quick Campaigns",
+      icon: <Mic size={18} />,
+      path: "/quick-campaigns",
+    },
   ];
 
   const toggleSidebar = () => {
@@ -84,37 +147,110 @@ const Sidebar = ({ activeItem, setActiveItem }) => {
     }
   };
 
+  const toggleDropdown = (menuItem) => {
+    setOpenDropdowns((prev) => ({
+      ...prev,
+      [menuItem]: !prev[menuItem],
+    }));
+  };
+
+  const handleItemClick = (itemText) => {
+    if (itemText.hasDropdown) {
+      toggleDropdown(itemText.text);
+    } else {
+      setActiveItem(itemText);
+      setActiveItem(itemText.text);
+      router.push(itemText.path);
+      if (itemText === "Agent Skills") {
+        // If it's Agent Skills, render the component in full screen
+        setIsFullScreen(true);
+      } else {
+        setIsFullScreen(false);
+      }
+    }
+  };
+
+  if (isFullScreen) {
+    return null;
+  }
+
+  const renderDropdownItems = (items) => {
+    return items.map((item) => (
+      <div
+        key={item.text}
+        className="flex items-center space-x-3 pl-8 py-2 cursor-pointer hover:bg-gray-100"
+        onClick={() => {
+          setActiveItem(item.text);
+          router.push(item.path);
+        }}
+      >
+        {isOpen && <span className="text-sm text-gray-600">{item.text}</span>}
+      </div>
+    ));
+  };
+
   const renderMenuSection = (title, items) => (
     <div className="mb-2">
       {isOpen && (
-        <p className="text-xs text-gray-500 font-semibold uppercase px-4 py-2">
+        <p className="text-xs text-gray-700 font-bold mt-4 capitalize px-4 py-2">
           {title}
         </p>
       )}
       {items.map((item) => (
-        <div
-          key={item.text}
-          className={`flex items-center space-x-3 px-4 py-2 cursor-pointer 
-            ${
-              activeItem === item.text
-                ? "bg-white border-l-4 border-blue-500"
-                : "hover:bg-gray-100"
-            }`}
-          onClick={() => setActiveItem(item.text)} // Update activeItem
-          title={!isOpen ? item.text : undefined}
-        >
-          <span className="text-gray-600">{item.icon}</span>
-          {isOpen && <span className="text-sm">{item.text}</span>}
+        <div key={item.text}>
+          <div
+            className={`flex text-gray-600 items-center text-xs space-x-3 px-4 py-2 cursor-pointer 
+              ${
+                activeItem === item.text
+                  ? "bg-white border-l-4 border-blue-500"
+                  : "hover:bg-gray-100"
+              }`}
+            onClick={() => handleItemClick(item)}
+            title={!isOpen ? item.text : undefined}
+          >
+            <span className="">{item.icon}</span>
+            {isOpen && (
+              <>
+                <span className="text-sm ml-3 flex-grow">{item.text}</span>
+                {item.hasDropdown && (
+                  <span className="ml-2">
+                    {openDropdowns[item.text] ? (
+                      <ChevronUp size={16} />
+                    ) : (
+                      <ChevronDown size={16} />
+                    )}
+                  </span>
+                )}
+              </>
+            )}
+          </div>
+          {/* Dropdown content */}
+          {item.hasDropdown && openDropdowns[item.text] && isOpen && (
+            <div className="bg-gray-50 py-1">
+              {item.dropdownItems.map((dropdownItem) => (
+                <div
+                  key={dropdownItem.text}
+                  className="flex items-center text-gray-600 text-xs hover:bg-gray-100 pl-11 py-2 cursor-pointer"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setActiveItem(dropdownItem.text);
+                    router.push(dropdownItem.path);
+                  }}
+                >
+                  <span>{dropdownItem.text}</span>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       ))}
     </div>
   );
-
   return (
     <div className="flex">
       <div
-        className={`h-screen bg-[#EFEFEF] border-r border-gray-200 
-          overflow-y-scroll scrollbar-hide transition-all duration-300 
+        className={`text-xs bg-[#EFEFEF] border-r  
+          overflow-y-visible scrollbar-hide transition-all duration-300 
           ${isOpen ? "w-56" : "w-16"}`}
       >
         <div className="py-2">
