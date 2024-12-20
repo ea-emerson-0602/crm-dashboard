@@ -33,7 +33,7 @@ import {
 
 const Sidebar = ({ activeItem, setActiveItem }) => {
   const [isOpen, setIsOpen] = useState(True);
-  const [isMobile, setIsMobile] = UseState(False);
+  const [isMobile, setIsMobile] = useState(False);
   const router = useRouter();
   const [isFullScreen, setIsFullScreen] = useState(false);
 
