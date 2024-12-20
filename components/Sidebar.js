@@ -40,31 +40,22 @@ const Sidebar = ({ activeItem, setActiveItem }) => {
   });
 
   useEffect(() => {
-    // Check if running in a browser environment
-    if (typeof window !== "undefined") {
+    // Only run this code in the browser
+    if (typeof window !== 'undefined') {
       const handleResize = () => {
         const mobile = window.innerWidth <= 768;
         setIsMobile(mobile);
         setIsOpen(!mobile);
       };
 
-      // Set initial state
+      // Set initial state based on window size (only in browser)
       handleResize();
 
-      // Add event listener
-      window.addEventListener("resize", handleResize);
-
-      // Cleanup event listener
-      return () => window.removeEventListener("resize", handleResize);
+      window.addEventListener('resize', handleResize);
+      return () => window.removeEventListener('resize', handleResize);
     }
   }, []);
 
-  useEffect(() => {
-    // Set full screen mode when Agent Skills is selected
-    if (typeof window !== "undefined") {
-      setIsFullScreen(activeItem === "Agent Skills");
-    }
-  }, [activeItem]);
  
   const recentItems = [
     { text: "Recent Project A", path: "/recent/project-a" },
