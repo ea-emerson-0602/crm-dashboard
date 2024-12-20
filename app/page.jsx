@@ -2,9 +2,8 @@
 import React, { useState } from "react";
 import Sidebar from "../components/Sidebar";
 import Navbar from "../components/Navbar";
-// import InsightsPanel from "../components/InsightsPanel";
 import LeadCard from "../components/LeadCard";
-import LeadModal from "../components/LeadModal";
+import MiniNavBar from "../components/Minivar";
 
 // Dummy Skeleton Loader Component
 const SkeletonLoader = () => (
@@ -24,28 +23,17 @@ const DummyContent = ({ title }) => (
   </div>
 );
 
-const leadsData = [
-  {
-    name: "Jane Reyes",
-    position: "CEO",
-    details: "Deal value: $1M, Decision Maker",
-  },
-  {
-    name: "John Doe",
-    position: "CTO",
-    details: "Deal value: $500K, Influencer",
-  },
-];
+
 
 const Home = () => {
-  const [selectedLead, setSelectedLead] = useState(null);
-  const [modalOpen, setModalOpen] = useState(false);
+  // const [selectedLead, setSelectedLead] = useState(null);
+  const [, setModalOpen] = useState(false);
   const [activeItem, setActiveItem] = useState("Leads"); // Default active item
 
   const handleCardClick = () => {
     // setSelectedLead(lead);
     setModalOpen(true);
-    setShowModal(true)
+    setShowModal(true);
   };
 
   // Function to render content based on the active menu item
@@ -53,15 +41,7 @@ const Home = () => {
     if (activeItem === "Leads") {
       return (
         <>
-          {/* <InsightsPanel /> */}
-          {/* {leadsData.map((lead) => ( */}
-          <LeadCard
-            // key={lead.name}
-            // lead={lead}
-            onClick={() => handleCardClick()}
-          />
-          {/* ))} */}
-         
+          <LeadCard onClick={() => handleCardClick()} />
         </>
       );
     } else {
@@ -70,20 +50,21 @@ const Home = () => {
   };
 
   return (
-    <div className="flex flex-col h-screen  space-y-12">
+    <div className="flex flex-col h-screen shadow-[0px_-26px_95px_49px_rgba(0,_0,_0,_0.1)] space-y-12">
       {/* Navbar at the top */}
       <Navbar />
 
       {/* Sidebar and Main Content Container */}
-      <div className="flex flex-1 space-x-4 space-y-4 ">
+      <div className="flex flex-1 ">
         {/* Sidebar */}
         <Sidebar activeItem={activeItem} setActiveItem={setActiveItem} />
 
         {/* Main Content */}
-        <div className="flex-grow bg-gray-50">
+        <div className="flex-grow py-4 px-4 bg-[#EFEFEF] border-l-[#EFEFEF/20] ">
           {/* <InsightsPanel /> */}
-          <div className="flex-grow bg-gray-50">{renderContent()}</div>
+          <div className="flex-grow ">{renderContent()}</div>
         </div>
+        <MiniNavBar />
       </div>
     </div>
   );

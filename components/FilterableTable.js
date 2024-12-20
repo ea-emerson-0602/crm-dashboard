@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { Search, ChevronUp, ChevronDown } from 'lucide-react';
+import copilot from '../assets/copilot-color.svg'
+import Image from 'next/image';
 
 const FilterableTable = () => {
   const initialData = [
@@ -47,17 +49,18 @@ const FilterableTable = () => {
   };
 
   return (
-    <div className="w-full max-w-5xl p-4 bg-white rounded-lg">
+    <div className=" p-4 bg-white rounded-lg">
       {/* Search Bar */}
-      <div className="relative mb-6">
+      <div className="relative mb-8 w-1/3 ">
         <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
         <input
           type="text"
           placeholder="Sort, filter and search with Copilot"
-          className="w-full pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500"
+          className="w-full pl-10 pr-4 py-2 outline-none active:outline-none border rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500"
           value={searchTerm}
           onChange={(e) => handleSearch(e.target.value)}
         />
+        <Image className="absolute right-3 top-1/2 transform -translate-y-1/2" src={copilot} alt="copilot logo" width={16} height={16} />
       </div>
 
       {/* Table */}

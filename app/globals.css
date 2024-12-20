@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+.border-convex-tl {
+  border-top-left-radius: -20px;
+  border-radius: 0 0 0 0.5rem; /* This maintains the bottom-left rounded corner */
+}
 body {
   margin: 0;
   font-family: 'Roboto', sans-serif;
@@ -11,7 +15,6 @@ body {
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
 }
-
 /* Hide scrollbar for IE, Edge and Firefox */
 .scrollbar-hide {
   -ms-overflow-style: none;  /* IE and Edge */

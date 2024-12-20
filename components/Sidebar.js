@@ -21,7 +21,6 @@ import {
   Mic,
   Menu,
   ChevronRight,
-  Award,
   ChevronDown,
   ChevronUp,
 } from "lucide-react";
@@ -84,7 +83,7 @@ const Sidebar = ({ activeItem, setActiveItem }) => {
       hasDropdown: true,
       dropdownItems: pinnedItems,
     },
-    { text: "My Work", icon: <File size={18} />, path: "/my-work" },
+    { text: "Agent Skills", icon: <File size={18} />, path: "/agent-skills" },
   ];
 
   const myWork = [
@@ -140,6 +139,7 @@ const Sidebar = ({ activeItem, setActiveItem }) => {
       path: "/quick-campaigns",
     },
   ];
+  const performance = [{ text: "Sales", icon: <span className="bg-red-200 text-red-900 py-2 px-3">S</span>, path: "/sales" }];
 
   const toggleSidebar = () => {
     if (!isMobile) {
@@ -174,20 +174,20 @@ const Sidebar = ({ activeItem, setActiveItem }) => {
     return null;
   }
 
-  const renderDropdownItems = (items) => {
-    return items.map((item) => (
-      <div
-        key={item.text}
-        className="flex items-center space-x-3 pl-8 py-2 cursor-pointer hover:bg-gray-100"
-        onClick={() => {
-          setActiveItem(item.text);
-          router.push(item.path);
-        }}
-      >
-        {isOpen && <span className="text-sm text-gray-600">{item.text}</span>}
-      </div>
-    ));
-  };
+  // const renderDropdownItems = (items) => {
+  //   return items.map((item) => (
+  //     <div
+  //       key={item.text}
+  //       className="flex items-center space-x-3 pl-8 py-2 cursor-pointer hover:bg-gray-100"
+  //       onClick={() => {
+  //         setActiveItem(item.text);
+  //         router.push(item.path);
+  //       }}
+  //     >
+  //       {isOpen && <span className="text-sm text-gray-600">{item.text}</span>}
+  //     </div>
+  //   ));
+  // };
 
   const renderMenuSection = (title, items) => (
     <div className="mb-2">
@@ -211,7 +211,7 @@ const Sidebar = ({ activeItem, setActiveItem }) => {
             <span className="">{item.icon}</span>
             {isOpen && (
               <>
-                <span className="text-sm ml-3 flex-grow">{item.text}</span>
+                <span className="text-[11px] ml-3 flex-grow">{item.text}</span>
                 {item.hasDropdown && (
                   <span className="ml-2">
                     {openDropdowns[item.text] ? (
@@ -249,11 +249,11 @@ const Sidebar = ({ activeItem, setActiveItem }) => {
   return (
     <div className="flex">
       <div
-        className={`text-xs bg-[#EFEFEF] border-r  
-          overflow-y-visible scrollbar-hide transition-all duration-300 
-          ${isOpen ? "w-56" : "w-16"}`}
+        className={`text-xs bg-[#EFEFEF]
+          overflow-y-visible scrollbar-hide transition-all duration-300
+          ${isOpen ? "w-40" : "w-12"}`}
       >
-        <div className="py-2">
+        <div className="py-2 text-xs  border-r-[#dadada] border-r-2">
           <div
             className="flex px-4 py-2 hover:bg-gray-100 cursor-pointer"
             onClick={toggleSidebar}
@@ -267,6 +267,7 @@ const Sidebar = ({ activeItem, setActiveItem }) => {
           {renderMenuSection("Sales", sales)}
           {renderMenuSection("Collateral", collateral)}
           {renderMenuSection("Marketing", marketing)}
+          {renderMenuSection("Performance", performance)}
         </div>
       </div>
     </div>
