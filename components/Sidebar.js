@@ -32,8 +32,8 @@ import {
 // Dummy Component for Content Display
 
 const Sidebar = ({ activeItem, setActiveItem }) => {
-  const [isOpen, setIsOpen] = useState(True);
-  const [isMobile, setIsMobile] = useState(False);
+  const [isOpen, setIsOpen] = useState(true);
+  const [isMobile, setIsMobile] = useState(false);
   const router = useRouter();
   const [isFullScreen, setIsFullScreen] = useState(false);
 
