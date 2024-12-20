@@ -3,12 +3,12 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   webpack: (config, { isServer }) => {
-    // Ensure that certain client-side code is only included on the client-side
+    // Check if it's server-side and modify config accordingly
     if (isServer) {
-      // You can add more exclusions here if needed
+      // Remove fs property, as it's not needed in Next.js Webpack 5
       config.node = {
         ...config.node,
-        fs: 'empty', // Example for excluding file system access in SSR
+        // Remove fs property if you don't need it
       };
     }
 
