@@ -40,21 +40,32 @@ const Sidebar = ({ activeItem, setActiveItem }) => {
   });
 
   useEffect(() => {
-    const handleResize = () => {
-      const mobile = window.innerWidth <= 768;
-      setIsMobile(mobile);
-      setIsOpen(!mobile);
-    };
+    // Check if running in a browser environment
+    if (typeof window !== "undefined") {
+      const handleResize = () => {
+        const mobile = window.innerWidth <= 768;
+        setIsMobile(mobile);
+        setIsOpen(!mobile);
+      };
 
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
+      // Set initial state
+      handleResize();
+
+      // Add event listener
+      window.addEventListener("resize", handleResize);
+
+      // Cleanup event listener
+      return () => window.removeEventListener("resize", handleResize);
+    }
   }, []);
 
   useEffect(() => {
     // Set full screen mode when Agent Skills is selected
-    setIsFullScreen(activeItem === "Agent Skills");
+    if (typeof window !== "undefined") {
+      setIsFullScreen(activeItem === "Agent Skills");
+    }
   }, [activeItem]);
-
+ 
   const recentItems = [
     { text: "Recent Project A", path: "/recent/project-a" },
     { text: "Recent Customer B", path: "/recent/customer-b" },
@@ -139,7 +150,13 @@ const Sidebar = ({ activeItem, setActiveItem }) => {
       path: "/quick-campaigns",
     },
   ];
-  const performance = [{ text: "Sales", icon: <span className="bg-red-200 text-red-900 py-2 px-3">S</span>, path: "/sales" }];
+  const performance = [
+    {
+      text: "Sales",
+      icon: <span className="bg-red-200 text-red-900 py-2 px-3">S</span>,
+      path: "/sales",
+    },
+  ];
 
   const toggleSidebar = () => {
     if (!isMobile) {
